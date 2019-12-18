@@ -1,0 +1,18 @@
+{
+    "name": "WeatherBot",
+    "version": "1.0.0",
+    "engines": {
+        "node": "12.11.1"
+    },
+    "description": "Fetches weather information using OpenWeatherMap API ",
+    "main": "bot.js",
+    "author": "Benjamin Zhuo",
+    "dependencies": {
+        "discord.js": "^11.5.1",
+        "node-schedule": "^1.3.2",
+        "request-promise": "^4.2.5"
+    },
+    "scripts": {
+        "start": "node bot.js"
+    }
+}
