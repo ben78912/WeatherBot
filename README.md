@@ -18,10 +18,13 @@ A Discord bot that provides information about the weather.
 
 ## If I had more time...
 **Code for errors**
+
 If the OpenWeatherMap API endpoint is unavailable, no information would be displayed. Could display a specific message detailing why in this case.
 
 **10 minute calls**
+
 OpenWeatherMap API says calls should only be made every 10 minutes, which my code does not enforce. 
 
 **Search by coordinates**
+
 OpenWeatherMap API can find weather information from geo-coordinates. This could be a nice feature.
