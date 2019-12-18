@@ -32,7 +32,7 @@ bot.on('message', async message => {
     // Prevent bot from replying to other bots.
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     // 
-    const args = message.content.split(" ");
+    const args = message.content.split("-");
     const command = args[0].slice(1).toLowerCase();
     const city = args[1];
     if (args.length < 3) { 
