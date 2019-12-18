@@ -82,7 +82,6 @@ function getTemp(url) {
     return rp(url).then(body => {
         let responseJSON = JSON.parse(body)
         let message = `It's ${responseJSON.main.temp} degrees in ${responseJSON.name}!`;
-        console.log(responseJSON);
         return message;
     });
 }
