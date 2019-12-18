@@ -1,16 +1,16 @@
 const Discord = require('discord.js');
 const auth = require('./auth.json');
-const schedule = require('node-schedule');  
 const rp = require('request-promise');
-const fetch = require('node-fetch');
 
 // Initialize Discord Bot
 const bot = new Discord.Client();
 var today = new Date();
+
+// Prefix used for commands
 const prefix = '!';
 
-
-var key = "87e98570a9100d9e99f711797411f2c7";
+// Openweathermap API key
+var key = "7f7b3c26549d04ad9b2ce78fd2448c82";
 
 bot.on('ready', () => {
     var time = today.getHours() + ':' + today.getMinutes();
@@ -20,9 +20,7 @@ bot.on('ready', () => {
     bot.user.setActivity("with the clouds");
 });
 
-bot.on('guildMemberAdd', member => {
-});
-
+// Dictionary for units
 var dict = {
     "f" : "imperial",
     "c" : "metric",
@@ -43,8 +41,10 @@ bot.on('message', async message => {
         var type = args[2];
     }
 
+    // get weather data URL
     var url = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=' + dict[type] + '&appid=' + key;
     switch (command) {
+        // Get current temperature
         case "temp":
             getTemp(url).then(info => {
                 message.channel.send(info);
@@ -52,6 +52,7 @@ bot.on('message', async message => {
                 console.log('Got error', err);
             });
             break;
+        // Get current weather
         case "weather":
             getWeather(url).then(info => {
                 message.channel.send(info);
@@ -59,7 +60,9 @@ bot.on('message', async message => {
                 console.log('Got error', err);
             });
             break
+        //Get 5 day weather forecast
         case "forecast":
+            // Get forecast URL
             url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&mode=json&units=metric&appid=' + key;
             getForecast(url).then(info => {
                 message.channel.send(info);
@@ -67,6 +70,7 @@ bot.on('message', async message => {
                 console.log('Got error', err);
             })
             break
+        // Other commands
         default:
             message.channel.send("Syntax error");
             break
@@ -102,39 +106,40 @@ function getForecast(url) {
 }
 
 function buildEmbed(info) {
+    // Get index of days at time noon
     let indexes = findNoons(info);
     // Counter for indexes
     let i = 0;
     return {embed: {
-        color: 3447003,
-        title: "5 day forecast for " + info.city.name + ', ' + info.city.country,
-        description: 'Given temperatures are forecast for noon (Celsius).',
+        color: 3447003, // Colour of text
+        title: "5 day forecast for " + info.city.name + ', ' + info.city.country, // City + country code
+        description: 'Given temperatures are forecast for noon (Celsius).', // Default temperature in Celsius, maybe change for other options
         fields: [{
-            name: dateName(info.list[indexes[i]].dt_txt),
+            name: dateName(info.list[indexes[i]].dt_txt), // Day 1
             value: info.list[indexes[i]].main.temp + "° with " + info.list[indexes[i]].weather[0].description 
                                                 + '\n' + addEmote(info.list[indexes[i++]].weather[0].description),
             inline: true
             }, 
             {
-            name: dateName(info.list[indexes[i]].dt_txt),
+            name: dateName(info.list[indexes[i]].dt_txt), // Day 2
             value: info.list[indexes[i]].main.temp + "° with " + info.list[indexes[i]].weather[0].description
                                                 + '\n' + addEmote(info.list[indexes[i++]].weather[0].description),
             inline: true
             },
             {
-            name: dateName(info.list[indexes[i]].dt_txt),
+            name: dateName(info.list[indexes[i]].dt_txt), // Day 3
             value: info.list[indexes[i]].main.temp + "° with " + info.list[indexes[i]].weather[0].description
                                                 + '\n' + addEmote(info.list[indexes[i++]].weather[0].description),
             inline: true
             },
             {
-            name: dateName(info.list[indexes[i]].dt_txt),
+            name: dateName(info.list[indexes[i]].dt_txt), // Day 4
             value: info.list[indexes[i]].main.temp + "° with " + info.list[indexes[i]].weather[0].description
                                                 + '\n' + addEmote(info.list[indexes[i++]].weather[0].description),
             inline: true
             },
             {
-            name: dateName(info.list[indexes[i]].dt_txt),
+            name: dateName(info.list[indexes[i]].dt_txt), // Day 5  
             value: info.list[indexes[i]].main.temp + "° with " + info.list[indexes[i]].weather[0].description
                                                 + '\n' + addEmote(info.list[indexes[i++]].weather[0].description),
             inline: true
@@ -169,6 +174,7 @@ function buildMessage(info) {
 
 function findNoons(info) {
     var indexes = [];
+    // Go through dictionary and find times at noon
     info.list.forEach(function (item, index) {
         let dateTime = item.dt_txt.split(' ');
         if (dateTime[1].includes('12')) {
@@ -181,6 +187,7 @@ function findNoons(info) {
 /**
  * Created by jjansen on 09-Mar-15 4:56 PM.
  * stackoverflow
+ * Converts yyyy-mm-dd time to date in text form
  */
 function dateName(dateInfo) {
     var monthNames = [
@@ -219,6 +226,7 @@ function dateName(dateInfo) {
     return fullDate ;
 }
 
+// Add an emote depending on the weather
 function addEmote(weather) {
     if (weather.includes('cloud')) {
         return ':cloud:';
