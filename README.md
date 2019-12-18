@@ -3,7 +3,8 @@
 A Discord bot that provides information about the weather.
 
 ## Example Forecast call
-![]( Capture.png )
+![alt text]( https://github.com/ben78912/WeatherBot/blob/master/Capture.PNG "example call")
+
 ## Technology Stack
 - Node.js
 - Discord.js
@@ -11,7 +12,10 @@ A Discord bot that provides information about the weather.
 
 ## Adding to your server
 [Click this link to add the bot to your server](https://discordapp.com/api/oauth2/authorize?client_id=655884213916008504&permissions=313408&scope=bot)
+
+
 **Note:** The person adding the bot to the server needs "Manage Server" permissions to do so.
+
 ## If I had more time...
 **Code for errors**
 If the OpenWeatherMap API endpoint is unavailable, no information would be displayed. Could display a specific message detailing why in this case.
